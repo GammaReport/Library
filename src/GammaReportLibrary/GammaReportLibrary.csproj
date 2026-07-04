@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\GammaReportLibrary.Abstractions\GammaReportLibrary.Abstractions.csproj" />
-    <ProjectReference Include="..\GammaReportLibrary.Application\GammaReportLibrary.Application.csproj" />
-    <ProjectReference Include="..\GammaReportLibrary.Infrastructure\GammaReportLibrary.Infrastructure.csproj" />
+    <ProjectReference Include="..\GammaReportLibrary.Abstractions\GammaReportLibrary.Abstractions.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\GammaReportLibrary.Application\GammaReportLibrary.Application.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\GammaReportLibrary.Infrastructure\GammaReportLibrary.Infrastructure.csproj" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +20,7 @@
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeGammaReportInternalOutputs</TargetsForTfmSpecificBuildOutput>
     <PackageId>GammaReportLibrary</PackageId>
     <Authors>GammaReport</Authors>
     <Description>.NET SDK for Gamma Public API with typed and raw clients, retry policies, and DI integration.</Description>
@@ -30,5 +31,28 @@
     <PackageTags>gamma;report;sdk;dotnet</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <Target Name="IncludeGammaReportInternalOutputs">
+    <ItemGroup>
+      <BuildOutputInPackage Include="$(MSBuildProjectDirectory)\..\GammaReportLibrary.Abstractions\bin\$(Configuration)\$(TargetFramework)\GammaReportLibrary.Abstractions.dll" Condition="Exists('$(MSBuildProjectDirectory)\..\GammaReportLibrary.Abstractions\bin\$(Configuration)\$(TargetFramework)\GammaReportLibrary.Abstractions.dll')">
+        <TargetPath>GammaReportLibrary.Abstractions.dll</TargetPath>
+      </BuildOutputInPackage>
+      <BuildOutputInPackage Include="$(MSBuildProjectDirectory)\..\GammaReportLibrary.Abstractions\bin\$(Configuration)\$(TargetFramework)\GammaReportLibrary.Abstractions.xml" Condition="Exists('$(MSBuildProjectDirectory)\..\GammaReportLibrary.Abstractions\bin\$(Configuration)\$(TargetFramework)\GammaReportLibrary.Abstractions.xml')">
+        <TargetPath>GammaReportLibrary.Abstractions.xml</TargetPath>
+      </BuildOutputInPackage>
+      <BuildOutputInPackage Include="$(MSBuildProjectDirectory)\..\GammaReportLibrary.Application\bin\$(Configuration)\$(TargetFramework)\GammaReportLibrary.Application.dll" Condition="Exists('$(MSBuildProjectDirectory)\..\GammaReportLibrary.Application\bin\$(Configuration)\$(TargetFramework)\GammaReportLibrary.Application.dll')">
+        <TargetPath>GammaReportLibrary.Application.dll</TargetPath>
+      </BuildOutputInPackage>
+      <BuildOutputInPackage Include="$(MSBuildProjectDirectory)\..\GammaReportLibrary.Application\bin\$(Configuration)\$(TargetFramework)\GammaReportLibrary.Application.xml" Condition="Exists('$(MSBuildProjectDirectory)\..\GammaReportLibrary.Application\bin\$(Configuration)\$(TargetFramework)\GammaReportLibrary.Application.xml')">
+        <TargetPath>GammaReportLibrary.Application.xml</TargetPath>
+      </BuildOutputInPackage>
+      <BuildOutputInPackage Include="$(MSBuildProjectDirectory)\..\GammaReportLibrary.Infrastructure\bin\$(Configuration)\$(TargetFramework)\GammaReportLibrary.Infrastructure.dll" Condition="Exists('$(MSBuildProjectDirectory)\..\GammaReportLibrary.Infrastructure\bin\$(Configuration)\$(TargetFramework)\GammaReportLibrary.Infrastructure.dll')">
+        <TargetPath>GammaReportLibrary.Infrastructure.dll</TargetPath>
+      </BuildOutputInPackage>
+      <BuildOutputInPackage Include="$(MSBuildProjectDirectory)\..\GammaReportLibrary.Infrastructure\bin\$(Configuration)\$(TargetFramework)\GammaReportLibrary.Infrastructure.xml" Condition="Exists('$(MSBuildProjectDirectory)\..\GammaReportLibrary.Infrastructure\bin\$(Configuration)\$(TargetFramework)\GammaReportLibrary.Infrastructure.xml')">
+        <TargetPath>GammaReportLibrary.Infrastructure.xml</TargetPath>
+      </BuildOutputInPackage>
+    </ItemGroup>
+  </Target>
 
 </Project>
