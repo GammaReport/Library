@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/GammaReportLibrary.Abstractions/GammaReportLibrary.Abstractions.csproj" />
+    <Project Path="src/GammaReportLibrary.Application/GammaReportLibrary.Application.csproj" />
+    <Project Path="src/GammaReportLibrary.Infrastructure/GammaReportLibrary.Infrastructure.csproj" />
+    <Project Path="src/GammaReportLibrary/GammaReportLibrary.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/GammaReportLibrary.ContractTests/GammaReportLibrary.ContractTests.csproj" />
+    <Project Path="tests/GammaReportLibrary.UnitTests/GammaReportLibrary.UnitTests.csproj" />
+  </Folder>
+</Solution>

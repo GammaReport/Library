@@ -1,0 +1,63 @@
+name: Release NuGet
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Derive package version from tag
+        shell: bash
+        run: |
+          TAG_NAME="${GITHUB_REF_NAME}"
+          echo "PACKAGE_VERSION=${TAG_NAME#v}" >> "$GITHUB_ENV"
+
+      - name: Restore
+        run: dotnet restore GammaReportLibrary.slnx
+
+      - name: Build
+        run: dotnet build GammaReportLibrary.slnx -c Release --no-restore -p:ContinuousIntegrationBuild=true -p:RepositoryCommit=${{ github.sha }}
+
+      - name: Test
+        run: dotnet test GammaReportLibrary.slnx -c Release --no-build --no-restore
+
+      - name: Pack facade project
+        run: >
+          dotnet pack src/GammaReportLibrary/GammaReportLibrary.csproj
+          -c Release
+          --no-build
+          --no-restore
+          -p:ContinuousIntegrationBuild=true
+          -p:RepositoryCommit=${{ github.sha }}
+          -p:PackageVersion=${{ env.PACKAGE_VERSION }}
+          -p:PackageOutputPath=./artifacts/nuget
+
+      - name: NuGet trusted publishing login
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Push package to nuget.org
+        shell: bash
+        run: >
+          dotnet nuget push "artifacts/nuget/*.nupkg"
+          --source https://api.nuget.org/v3/index.json
+          --api-key "${{ steps.login.outputs.NUGET_API_KEY }}"
+          --skip-duplicate

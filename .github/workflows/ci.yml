@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    tags-ignore:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-pack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore GammaReportLibrary.slnx
+
+      - name: Build
+        run: dotnet build GammaReportLibrary.slnx -c Release --no-restore
+
+      - name: Test
+        run: dotnet test GammaReportLibrary.slnx -c Release --no-build --no-restore
+
+      - name: Pack facade project
+        run: >
+          dotnet pack src/GammaReportLibrary/GammaReportLibrary.csproj
+          -c Release
+          --no-build
+          --no-restore
+          -p:ContinuousIntegrationBuild=true
+          -p:PackageOutputPath=./artifacts/nuget-ci

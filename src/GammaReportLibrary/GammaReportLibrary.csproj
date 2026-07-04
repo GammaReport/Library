@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\GammaReportLibrary.Abstractions\GammaReportLibrary.Abstractions.csproj" />
+    <ProjectReference Include="..\GammaReportLibrary.Application\GammaReportLibrary.Application.csproj" />
+    <ProjectReference Include="..\GammaReportLibrary.Infrastructure\GammaReportLibrary.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <PackageId>GammaReportLibrary</PackageId>
+    <Authors>GammaReport</Authors>
+    <Description>.NET SDK for Gamma Public API with typed and raw clients, retry policies, and DI integration.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/GammaReport/Library</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/GammaReport/Library</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>gamma;report;sdk;dotnet</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+</Project>
