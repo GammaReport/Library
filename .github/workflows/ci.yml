@@ -15,6 +15,9 @@ jobs:
   build-test-pack:
     runs-on: ubuntu-latest
 
+    env:
+      ARTIFACTS_DIR: ${{ github.workspace }}/artifacts/nuget-ci
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,6 +36,10 @@ jobs:
       - name: Test
         run: dotnet test GammaReportLibrary.slnx -c Release --no-build --no-restore
 
+      - name: Prepare package output directory
+        shell: bash
+        run: mkdir -p "$ARTIFACTS_DIR"
+
       - name: Pack facade project
         run: >
           dotnet pack src/GammaReportLibrary/GammaReportLibrary.csproj
@@ -40,4 +47,4 @@ jobs:
           --no-build
           --no-restore
           -p:ContinuousIntegrationBuild=true
-          -p:PackageOutputPath=./artifacts/nuget-ci
+          -p:PackageOutputPath=${{ env.ARTIFACTS_DIR }}

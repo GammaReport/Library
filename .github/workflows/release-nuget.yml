@@ -13,6 +13,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
 
+    env:
+      ARTIFACTS_DIR: ${{ github.workspace }}/artifacts/nuget
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,6 +40,10 @@ jobs:
       - name: Test
         run: dotnet test GammaReportLibrary.slnx -c Release --no-build --no-restore
 
+      - name: Prepare package output directory
+        shell: bash
+        run: mkdir -p "$ARTIFACTS_DIR"
+
       - name: Pack facade project
         run: >
           dotnet pack src/GammaReportLibrary/GammaReportLibrary.csproj
@@ -46,7 +53,7 @@ jobs:
           -p:ContinuousIntegrationBuild=true
           -p:RepositoryCommit=${{ github.sha }}
           -p:PackageVersion=${{ env.PACKAGE_VERSION }}
-          -p:PackageOutputPath=./artifacts/nuget
+          -p:PackageOutputPath=${{ env.ARTIFACTS_DIR }}
 
       - name: NuGet trusted publishing login
         uses: NuGet/login@v1
@@ -57,7 +64,7 @@ jobs:
       - name: Push package to nuget.org
         shell: bash
         run: >
-          dotnet nuget push "artifacts/nuget/*.nupkg"
+          dotnet nuget push "$ARTIFACTS_DIR/*.nupkg"
           --source https://api.nuget.org/v3/index.json
           --api-key "${{ steps.login.outputs.NUGET_API_KEY }}"
           --skip-duplicate
